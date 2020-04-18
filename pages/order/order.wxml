@@ -1,0 +1,19 @@
+<block wx:for="{{orders}}" wx:key="title">
+<van-card
+  bindtap="selectGoods"
+  tag="{{item.tag}}"
+  price="{{item.price}}"
+  desc="{{item.desc}}"
+  title="{{item.title}}"
+  thumb="/assets/image/1.jpg"
+  lazy-load
+>
+  <view slot="footer">
+    <van-button round
+     data-index="{{index}}"
+     data-price="{{item.price}}"
+  data-item="{{item}}"
+   loading="{{isPaying}}" bindtap="payOrder" type="danger" size="mini">付款</van-button>
+  </view>
+</van-card>
+</block>

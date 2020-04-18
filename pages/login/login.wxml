@@ -1,0 +1,23 @@
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <van-cell-group>
+  <van-field
+    name="username"
+    label="用户名"
+    placeholder="请输入用户名"
+    error-message="{{usernameMsg}}"
+  />
+  <van-field
+    label="密码"
+    name="password"
+    type="password"
+    placeholder="请输入密码"
+    error-message="{{passwordMsg}}"
+    border
+  />
+</van-cell-group>
+<button type="primary" size="default"  
+        bindtap="primary" form-type="submit"> 登录 </button>
+       
+</form>
+
+

@@ -1,0 +1,24 @@
+<view class="swiper">
+        <swiper indicator-dots autoplay="{{true}}" indicator-active-color="#007aff"  circular="{{true}}"
+            >
+            <block wx:for="{{sku.pictrue}}" wx:key="index" wx:for-key="{{index}}" >
+               <swiper-item>
+                    <image src="/assets/image/1.jpg" data-id="{{index}}" class="slide-image" mode="widthFix" lazy-load/>
+               </swiper-item>
+             </block>
+         </swiper>
+     </view>
+     <view class="title">
+     <text> {{goods.title}} \n</text>
+
+     </view>
+     <view>
+     <text>规格:</text><text>规格1</text><text>规格2</text>
+     </view>
+
+     <van-submit-bar
+     loading="{{isLoading}}"
+  price="{{ 3050 }}"
+  button-text="提交订单"
+  bind:submit="onSubmit"
+/>

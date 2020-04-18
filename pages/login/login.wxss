@@ -1,0 +1,15 @@
+/* pages/login/login.wxss */
+.section {
+  display: flex;
+  text-align: center;
+}
+.formInput {
+border: 1rpx solid #cccccc;
+border-radius: 20rpx;
+text-align: center;
+margin: 10rpx auto;
+}
+.section__title {
+  margin: 5rpx auto;
+  text-align: center;
+}

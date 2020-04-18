@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "van-field": "/components/field/index",
+    "van-submit-bar": "/components/submit-bar/index",
+    "van-calendar": "/components/calendar/index"
+  }
+}
