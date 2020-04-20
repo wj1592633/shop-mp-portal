@@ -1,0 +1,8 @@
+function priceFormat(price, number){
+  var number = number || 2;
+  var f_price = parseFloat(price)
+  return price * 100
+}
+module.exports = {
+  priceFormat: priceFormat
+}

@@ -1,42 +1,78 @@
 // pages/login/login.js
+import https from '../../service/net.js'
+import sysConfig from '../../service/path.js'
+var app = getApp();
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
     usernameMsg: "",
-    passwordMsg: ""
+    passwordMsg: "",
+    isLogin: false
   },
   formSubmit: function (e) {
-    if(!e.detail.value.username){
+    this.setData({
+      passwordMsg: "",
+      usernameMsg: ""
+    })
+    const username = e.detail.value.username;
+    const password = e.detail.value.password;
+    const user = {
+      'username': username,
+      'password': password
+    }
+    if (!username) {
       this.setData({
         usernameMsg: "账号不能为空"
       })
-    }else if(!e.detail.value.password){
+    } else if (!password) {
       this.setData({
         passwordMsg: "密码不能为空"
       })
-    }else{
+    } else {
       this.setData({
-        passwordMsg: "",
-        usernameMsg: ""
+        isLogin: true
       })
-      console.log('form发生了submit事件，携带数据为：', e.detail.value)
-     
-      wx.switchTab({
-        url: '/pages/index/index',
+      https.requestPost(sysConfig.userPath + '/oauth/login', user).then((res) => {
+        if (res.state === 200) {
+          wx.setStorage({
+            data: res.data.jwtToken,
+            key: sysConfig.accessTokenKey,
+          })
+          wx.setStorage({
+            data: res.data.refreshToken,
+            key: sysConfig.refreshTokenKey,
+          })
+          res.data.jwtToken = ''
+          res.data.refreshToken = ''
+          res.data.tokenKey = ''
+          app.globalData.user = res.data
+          wx.switchTab({
+            url: '/pages/index/index',
+          })
+          this.setData({
+            isLogin: false
+          })
+        } else {
+          wx.showToast({
+            title: res.fail,
+            icon: 'none',
+            duration: 2000
+          })
+          this.setData({
+            isLogin: false
+          })
+        }
+      }).catch((err) => {
+        this.setData({
+          isLogin: false
+        })
       })
     }
-    
+
   },
-  inValue(e){
-    console.log('eeeeeee')
-    console.log(e)
-  },
-  formReset: function () {
-    console.log('form发生了reset事件')
-  },
+
 
   /**
    * 生命周期函数--监听页面加载

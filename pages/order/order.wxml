@@ -1,18 +1,17 @@
-<block wx:for="{{orders}}" wx:key="title">
+<block wx:for="{{orders}}" wx:key="orderId">
 <van-card
-  bindtap="selectGoods"
-  tag="{{item.tag}}"
-  price="{{item.price}}"
-  desc="{{item.desc}}"
-  title="{{item.title}}"
+  tag=""
+  price="{{item.goodsPricePer}}"
+  desc="{{item.stateStr}}"
+  title="{{item.goodsName}}"
   thumb="/assets/image/1.jpg"
   lazy-load
 >
-  <view slot="footer">
+  <view slot="footer" wx:if="{{item.state === 0}}">
     <van-button round
-     data-index="{{index}}"
-     data-price="{{item.price}}"
-  data-item="{{item}}"
+  data-orderId="{{item.orderId}}"
+  data-userId="{{item.userId}}"
+  bindtap="payOrder"
    loading="{{isPaying}}" bindtap="payOrder" type="danger" size="mini">付款</van-button>
   </view>
 </van-card>

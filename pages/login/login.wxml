@@ -3,11 +3,13 @@
   <van-field
     name="username"
     label="用户名"
+    value="aaa"
     placeholder="请输入用户名"
     error-message="{{usernameMsg}}"
   />
   <van-field
     label="密码"
+    value="123"
     name="password"
     type="password"
     placeholder="请输入密码"
@@ -16,6 +18,7 @@
   />
 </van-cell-group>
 <button type="primary" size="default"  
+loading="{{isLogin}}"
         bindtap="primary" form-type="submit"> 登录 </button>
        
 </form>

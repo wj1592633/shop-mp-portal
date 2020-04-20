@@ -1,31 +1,35 @@
 <view class="container-profile" style='height:{{windowHeight}}rpx'>
-		<view class="top">
-			<view class="center">
-				<view class="center_top">
-					<view class="center_img" bindtap="toBaseInfo">
-						<!-- <image src="../../static/info_img.jpg"></image> -->
-						<open-data type="userAvatarUrl" class="user_head"></open-data>
-					</view>
-					<view class="center_info" bindtap="toBaseInfo">
-						<view class="center_name">{{trueName}}</view>
-						<!-- <view class="center_phone">phone:{{phone}}</view> -->
-						<view class="center_phone">基本信息</view>
-					</view>
+	<view class="top">
+		<view class="center">
+			<view class="center_top">
+				<view class="center_img" bindtap="toBaseInfo">
+					<!-- <image src="../../static/info_img.jpg"></image> -->
+					<open-data type="userAvatarUrl" class="user_head"></open-data>
 				</view>
-				<view class="center_down">
-					<view class="center_rank" bindtap="toNone">
-						<image class="rank_icon" src=""></image>
-						<text class="rank_text">我的xx</text>
-					</view>
-					<view class="center_score" bindtap="toNone">
-						
-            <van-icon class="rank_icon" name="gold-coin-o" />
-						<text class="rank_text">我的钱</text>
-					</view>
+				<view class="center_info" bindtap="toBaseInfo">
+					<view class="center_name">{{user.nickname}}</view>
+					<!-- <view class="center_phone">phone:{{phone}}</view> -->
+					<view class="center_phone">基本信息</view>
 				</view>
 			</view>
-			<image src='/assets/image/2.gif' mode='scaleToFill' class='gif-wave'></image>
+			<view class="center_down">
+				<view class="center_rank" bindtap="toNone">
+					<image class="rank_icon" src=""></image>
+					<text class="rank_text">我的xx</text>
+				</view>
+				<view class="center_score" bindtap="toNone">
+
+					<van-icon class="rank_icon" name="gold-coin-o" />
+					<text class="rank_text">我的钱:{{user.amount}}</text>
+				</view>
+			</view>
 		</view>
-		<view wx:if="{{isLogin}}" class="login-btn"><van-button type="primary" block>退出登录</van-button></view>
-		<view class="login-btn" wx:else><van-button type="primary" block>登录</van-button></view>
+		<image src='/assets/image/2.gif' mode='scaleToFill' class='gif-wave'></image>
 	</view>
+	<view wx:if="{{isLogin}}" class="login-btn">
+		<van-button type="primary" bindtap="logout" block>退出登录</van-button>
+	</view>
+	<view class="login-btn" wx:else>
+		<van-button type="primary" block>登录</van-button>
+	</view>
+</view>

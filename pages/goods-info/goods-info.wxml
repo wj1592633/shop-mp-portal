@@ -1,24 +1,21 @@
 <view class="swiper">
-        <swiper indicator-dots autoplay="{{true}}" indicator-active-color="#007aff"  circular="{{true}}"
-            >
-            <block wx:for="{{sku.pictrue}}" wx:key="index" wx:for-key="{{index}}" >
-               <swiper-item>
-                    <image src="/assets/image/1.jpg" data-id="{{index}}" class="slide-image" mode="widthFix" lazy-load/>
-               </swiper-item>
-             </block>
-         </swiper>
-     </view>
-     <view class="title">
-     <text> {{goods.title}} \n</text>
+	<swiper indicator-dots autoplay="{{true}}" indicator-active-color="#007aff" circular="{{true}}">
+		<block wx:for="123" wx:key="index" wx:for-key="{{index}}">
+			<swiper-item>
+				<image src="/assets/image/1.jpg" class="slide-image" mode="widthFix" lazy-load />
+			</swiper-item>
+		</block>
+	</swiper>
+</view>
+<view class="title">
+	<view> {{currentGoods.title}}</view>
 
-     </view>
-     <view>
-     <text>规格:</text><text>规格1</text><text>规格2</text>
-     </view>
-
-     <van-submit-bar
-     loading="{{isLoading}}"
-  price="{{ 3050 }}"
-  button-text="提交订单"
-  bind:submit="onSubmit"
-/>
+</view>
+<view> {{currentGoods.goodsDesc}}</view>
+<view>
+	<view>规格:</view>
+	<van-button round color="{{index == currentSkuIndex ? selectColor : ''}}" wx:for="{{skus}}" wx:key="index" bindtap="selectSku" data-sku="{{item}}" data-index="{{index}}" >{{item.skuParams}} </van-button>
+</view>
+<view>库存:{{currentSku.skuReserve}}</view>
+<wxs src="../../wxs/formatPrice.wxs" module="formatPrice"> </wxs>
+<van-submit-bar loading="{{isLoading}}" price="{{ formatPrice.priceFormat(currentSku.price)  }}"   button-text="提交订单" bind:submit="onSubmit" />

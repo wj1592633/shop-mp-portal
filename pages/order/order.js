@@ -1,101 +1,116 @@
 // pages/order/order.js
+import https from '../../service/net.js'
+import sysConfig from '../../service/path.js'
+const app = getApp()
 Page({
   data: {
     isPaying: false,
-    orders: [{
-        tag: "正品",
-        price: "10.00",
-        desc: "商品1",
-        title: "商品1标题"
-      },
-      {
-        tag: "正品",
-        price: "110.00",
-        desc: "商品2",
-        title: "商品2标题"
-      },
-      {
-        tag: "正品",
-        price: "1.00",
-        desc: "商品3",
-        title: "商品3标题"
-      },
-      {
-        tag: "正品",
-        price: "1.00",
-        desc: "商品3",
-        title: "商品3标题"
-      }
-    ]
+    pageData: {
+      current: 1,
+      size: 10
+    },
+    orders: []
   },
-  payOrder(event){
-    console.log('event',event)
+  payOrder(event) {
+    console.log('event', event)
   },
 
+  getOrdersList() {
+    var _this = this;
+    https.requestGet(sysConfig.orderPath + '/order/records', _this.data.pageData).then(res => {
+      if (res.state === 200) {
+        if (res.data.records.length > 0) {
+          _this.setData({
+            orders: _this.data.orders.concat(res.data.records)
+          })
+        } else {
+          if (this.data.pageData.current > 1) {
+            var newPage = JSON.parse(JSON.stringify(this.data.pageData))
+            newPage.current = newPage.current - 1;
+            this.setData({
+              pageData: newPage
+            })
+          }
+        }
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getOrdersList();
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
 
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    console.log('onPullDownRefresh')
+    var newPage = JSON.parse(JSON.stringify(this.data.pageData))
+    newPage.current = 1;
+    this.setData({
+      orders: [],
+      pageData: newPage
+    })
+    this.getOrdersList();
   },
+  payOrder(event) {
+    const _this = this;
+    console.log(event.currentTarget.dataset)
+    wx.showModal({
+      cancelColor: '#cccccc',
+      title: '提示',
+      content: '确定付款',
+      success(res) {
+        if (res.confirm) {
+          _this.setData({
+            isPaying: true
+          })
+          var arg1 = {'userId': event.currentTarget.dataset.userid, 'orderId': event.currentTarget.dataset.orderid}
+          https.requestGet(sysConfig.userPath + '/user/pay', arg1).then(res => {
+            if (res.state === 200) {
+              wx.showToast({
+                title: res.data,
+                icon: 'success',
+                duration: 2000
+              }) 
+            } else {
+              wx.showToast({
+                title: res.fail,
+                icon: 'none',
+                duration: 2000
+              }) 
+            }
+            _this.setData({
+              isPaying: false
+            })
+          }).catch(err => {
+            _this.setData({
+              isPaying: false
+            })
+          })
 
+        }
+      }
+    })
+
+  },
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    console.log('onReachBottom')
-    var newArr = [{
-        tag: "正品",
-        price: Math.random() * 10,
-        desc: "商品3",
-        title: "商品3标题"
-      },
-      {
-        tag: "正品",
-        price: Math.random() * 10,
-        desc: "商品3",
-        title: "商品3标题"
-      }
-    ]
-   
+    var newPage = JSON.parse(JSON.stringify(this.data.pageData))
+    newPage.current = newPage.current + 1;
+    this.data.pageData.current + 1
     this.setData({
-      orders:  this.data.orders.concat(newArr)
+      pageData: newPage
     })
+    this.getOrdersList();
   },
 
   /**

@@ -5,51 +5,56 @@ const app = getApp()
 
 Page({
   data: {
-    goodsList:[
-      {tag:"正品",
-      price:"10.00",
-      desc:"商品1",
-      title:"商品1标题"
+    pageData: {
+      current: 1,
+      size: 10
     },
-    {tag:"正品",
-    price:"110.00",
-    desc:"商品2",
-    title:"商品2标题"
+    goodsList:[]
   },
-  {tag:"正品",
-  price:"1.00",
-  desc:"商品3",
-  title:"商品3标题"
-}
-    ]
+  showInfo(event){
+    app.globalData.currentGoods = event.currentTarget.dataset.goods
+    wx.navigateTo({
+      url: '/pages/goods-info/goods-info'
+    })
   },
-  selectGoods(event){
-    console.log("eeeadasdasdasf",event)
-  },
-  search(){
-    
-https.requestGet('https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=18475999672').then(
-  (res)=>{
-    // console.log(sysConfig.baseUrl)
-    // console.log('sysConfig',sysConfig)
-    console.log('ress')
-     console.log(res)
-  }
-).catch(err=>{
-  console.log('err->>>')
-  console.log(err)
-})
-  },
+  
+  
   
   //事件处理函数
   bindViewTap: function() {
    
   },
-  onLoad: function () {
-   
+  getGoodsList(){
+    var _this = this;
+   https.requestGet(sysConfig.goodsPath + '/goods/list', _this.data.pageData).then(res=>{
+     if (res.state === 200){
+       if(res.data.records.length > 0){
+        _this.setData({
+          goodsList: _this.data.goodsList.concat(res.data.records)
+         })   
+       } else {
+         if(this.data.pageData.current > 1){
+          var newPage = JSON.parse(JSON.stringify(this.data.pageData))
+          newPage.current = newPage.current - 1;
+          this.setData({
+            pageData: newPage
+          })
+         }  
+       }
+     }
+   })
   },
-  onReachBottom:()=>{
-    console.log("giugiug")
+  onLoad: function () {
+  this.getGoodsList()
+  },
+  onReachBottom: function(){
+    var newPage = JSON.parse(JSON.stringify(this.data.pageData))
+    newPage.current = newPage.current + 1;
+    //this.data.pageData.current + 1
+    this.setData({
+      pageData: newPage
+    })
+    this.getGoodsList();
   }
 
 })

@@ -1,17 +1,67 @@
+import https from '../../service/net.js'
+import sysConfig from '../../service/path.js'
+var app = getApp();
 Page({
   data: {
-    goods:{title:"三至松鼠"},
-    sku:{
-      pictrue:[{p1:1},{p2:2},{p3:3}],
-      
-    },
+    skus:[],
+    currentGoods:{},
+    selectColor:'#CCCCCC',
+    currentSkuIndex:0,
+    currentSku:{},
     isLoading:false
   },
   onSubmit(){
-    this.setData({isLoading:true})
-    setTimeout(()=>{
-      this.setData({isLoading:false})
-    },1000)
+    var _this = this;
+    var orderData = JSON.parse(JSON.stringify(this.data.currentSku))
+    orderData.name = this.data.currentGoods.name;
+    orderData.userId = this.data.currentGoods.userId;
+    orderData.goodsPricePer = this.data.currentSku.price;
+    console.log(orderData)
+    _this.setData({isLoading:true})
+    https.requestPost(sysConfig.orderPath + '/order/add', orderData).then(res => {
+      console.log('resssss',res)
+      if (res.state === 200){
+        wx.showToast({
+          title: res.data,
+          icon: 'success',
+          duration: 2000
+        }) 
+      }else {
+        wx.showToast({
+          title: res.fail,
+          icon: 'none',
+          duration: 2000
+        }) 
+      }
+      _this.setData({isLoading:false})
+    })
+  },
+  onPullDownRefresh:function(){
+    this.onLoad();
+  },
+  selectSku(options){
+    console.log(options.currentTarget.dataset)
+    this.setData({
+      currentSkuIndex: options.currentTarget.dataset.index,
+      currentSku: options.currentTarget.dataset.sku,
+    });
+  },
+  onLoad: function(event){
+    var _this = this;
+    var appCurrentGoods = app.globalData.currentGoods
+    https.requestGet(sysConfig.goodsPath + '/sku/' + appCurrentGoods.goodsId).then(res => {
+      if (res.state === 200){
+        console.log(res.data)
+        _this.setData({
+          skus: res.data,
+          currentSkuIndex: 0,
+          
+          currentGoods: appCurrentGoods,
+          currentSku: res.data[0]
+        })
+      }
+    })
+   
   }
   
 })

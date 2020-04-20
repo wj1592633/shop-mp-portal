@@ -1,22 +1,14 @@
 <!--index.wxml-->
-<view class="container">
-  <button bindtap="search"> 查询</button>
-</view>
 <block wx:for="{{goodsList}}" wx:key="title">
 <van-card
-  bindtap="selectGoods"
-  tag="{{item.tag}}"
+  tag="haochi"
   data-index="{{index}}"
-  data-item="{{item}}"
-  price="{{item.price}}"
-  desc="{{item.desc}}"
-  title="{{item.title}}"
+ data-goods="{{item}}"
+  desc="{{item.title}}"
+  title="{{item.name}}"
   thumb="/assets/image/1.jpg"
+  bindtap="showInfo" 
   lazy-load
 >
-  <view slot="footer">
-    <van-button size="mini">按钮</van-button>
-    <van-button size="mini">按钮</van-button>
-  </view>
 </van-card>
 </block>
