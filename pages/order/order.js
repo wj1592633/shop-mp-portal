@@ -11,10 +11,7 @@ Page({
     },
     orders: []
   },
-  payOrder(event) {
-    console.log('event', event)
-  },
-
+  
   getOrdersList() {
     var _this = this;
     https.requestGet(sysConfig.orderPath + '/order/records', _this.data.pageData).then(res => {
@@ -59,13 +56,16 @@ Page({
     })
     this.getOrdersList();
   },
+  // payOrder(event) {
+  //   console.log('event', event)
+  // },
   payOrder(event) {
     const _this = this;
     console.log(event.currentTarget.dataset)
     wx.showModal({
       cancelColor: '#cccccc',
-      title: '提示',
-      content: '确定付款',
+      title: '确定付款',
+      
       success(res) {
         if (res.confirm) {
           _this.setData({
@@ -89,6 +89,7 @@ Page({
             _this.setData({
               isPaying: false
             })
+            _this.onLoad()
           }).catch(err => {
             _this.setData({
               isPaying: false

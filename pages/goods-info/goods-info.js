@@ -16,7 +16,6 @@ Page({
     orderData.name = this.data.currentGoods.name;
     orderData.userId = this.data.currentGoods.userId;
     orderData.goodsPricePer = this.data.currentSku.price;
-    console.log(orderData)
     _this.setData({isLoading:true})
     https.requestPost(sysConfig.orderPath + '/order/add', orderData).then(res => {
       console.log('resssss',res)
@@ -34,13 +33,14 @@ Page({
         }) 
       }
       _this.setData({isLoading:false})
+    }).catch(err => {
+      console.log('errrrrrrrrrrrrrrrr',err)
     })
   },
   onPullDownRefresh:function(){
     this.onLoad();
   },
   selectSku(options){
-    console.log(options.currentTarget.dataset)
     this.setData({
       currentSkuIndex: options.currentTarget.dataset.index,
       currentSku: options.currentTarget.dataset.sku,
@@ -51,11 +51,9 @@ Page({
     var appCurrentGoods = app.globalData.currentGoods
     https.requestGet(sysConfig.goodsPath + '/sku/' + appCurrentGoods.goodsId).then(res => {
       if (res.state === 200){
-        console.log(res.data)
         _this.setData({
           skus: res.data,
-          currentSkuIndex: 0,
-          
+          currentSkuIndex: 0, 
           currentGoods: appCurrentGoods,
           currentSku: res.data[0]
         })

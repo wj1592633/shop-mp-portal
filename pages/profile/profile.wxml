@@ -30,6 +30,6 @@
 		<van-button type="primary" bindtap="logout" block>退出登录</van-button>
 	</view>
 	<view class="login-btn" wx:else>
-		<van-button type="primary" block>登录</van-button>
+		<van-button type="primary" bindtap="toLogin" block>登录</van-button>
 	</view>
 </view>

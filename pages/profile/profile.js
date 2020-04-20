@@ -89,6 +89,11 @@ Page({
       }
     })
   },
+  toLogin(){
+    wx.navigateTo({
+      url: '/pages/login/login',
+    })
+  },
 
   /**
    * 生命周期函数--监听页面隐藏

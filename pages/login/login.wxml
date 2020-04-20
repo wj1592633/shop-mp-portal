@@ -19,7 +19,7 @@
 </van-cell-group>
 <button type="primary" size="default"  
 loading="{{isLogin}}"
-        bindtap="primary" form-type="submit"> 登录 </button>
+         form-type="submit"> 登录 </button>
        
 </form>
 
